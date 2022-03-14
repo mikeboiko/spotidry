@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 
+from pathlib import Path
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
-import os
-from dotenv import load_dotenv
+import yaml
 
-load_dotenv()
+config_path = Path('~/.config/spotidry/spotidry.yaml').expanduser().resolve()
+with open(config_path, 'r') as stream:
+    try:
+        config = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
+
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id=os.getenv('client_id'),
-    client_secret=os.getenv('client_secret'),
-    redirect_uri=os.getenv('redirect_uri'),
+    client_id=config.get('client_id'),
+    client_secret=config.get('client_secret'),
+    redirect_uri=config.get('redirect_uri'),
     scope='user-read-currently-playing user-library-read user-library-modify',
 ))
 
