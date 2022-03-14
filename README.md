@@ -1,5 +1,5 @@
-# Spotidry
+# spotidry
 
 This is a real dry & boring version of a spotify CLI player.
 
-The main reason for this player is to be able to save the currently-playing song to your Liked Tracks.
+My motivation for this project is to have a simple player where I can save the currently-playing song to my Liked Tracks.
