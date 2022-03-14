@@ -1,7 +1,7 @@
 """Console script for spotidry."""
 
 import sys
-import spotidry
+from . import spotidry
 
 def main(args=None):
     """Console script for spotidry."""
