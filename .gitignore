@@ -1,3 +1,5 @@
-.env
 .cache
+.env
+dist/
+spotidry/spotidry.egg-info
 tags
