@@ -3,8 +3,7 @@ Console script for spotidry
 '''
 
 import sys
-from spotidry import Spotidry
-# import spotidry
+from spotidry.spotify import Spotidry
 
 def main(args=None):
     """Console script for spotidry."""
