@@ -47,7 +47,7 @@ class Spotidry():
         self.cache_path = config_root.joinpath('.cache')
 
     def next(self):
-        print('next')
+        self.sp.next_track()
 
     def play(self):
         if self.play_status:
@@ -58,20 +58,8 @@ class Spotidry():
             self.sp.start_playback()
 
     def previous(self):
-        print('previous')
-
-    def print_info(self):
-        '''
-        Print a fancy status line
-        '''
-        artist = self.track['item']['artists'][0]['name']
-        song = self.track['item']['name']
-        play_symbol = '▶' if self.play_status else '⏸'
-        liked_symbol = '❤' if self.liked_status else '♡'
-        print(f'{play_symbol} {artist} - {song} {liked_symbol}')
-
-    def print_stopped(self):
-        print(' ⏹')
+        self.sp.previous_track()
+        # self.sp.seek_track(0)
 
     def save(self):
         '''
@@ -85,3 +73,16 @@ class Spotidry():
         else:
             self.liked_status = True
             self.sp.current_user_saved_tracks_add(tracks=[self.track_id])
+
+    def print_info(self):
+        '''
+        Print a fancy status line
+        '''
+        artist = self.track['item']['artists'][0]['name']
+        song = self.track['item']['name']
+        play_symbol = '▶' if self.play_status else '⏸'
+        liked_symbol = '❤' if self.liked_status else '♡'
+        print(f'{play_symbol} {artist} - {song} {liked_symbol}')
+
+    def print_stopped(self):
+        print(' ⏹')
