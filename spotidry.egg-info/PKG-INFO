@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: spotidry
+Version: 0.0.1
+Summary: A boring CLI Spotify client
+Home-page: https://github.com/mikeboiko/spotidry
+Author: Mike Boiko
+Author-email: mike@boiko.ca
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/mikeboiko/spotidry/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# spotidry
+
+This is a real dry & boring command line interface client for Spotify.
+
+My motivation for this project is to have a simple client that display the currently-playing track, along with it's Liked status.
+I also want to be able to save the currently-playing song to my Liked Tracks.
+
+

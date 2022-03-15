@@ -2,7 +2,9 @@
 Spotify CLI client
 '''
 
+# TODO-MB [220315] - fix import bug
 from spotidry.spotify import Spotidry
+# from spotify import Spotidry
 import argparse
 import sys
 

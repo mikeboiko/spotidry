@@ -1,0 +1,2 @@
+[console_scripts]
+spotidry = spotidry.cli:main
