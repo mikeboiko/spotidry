@@ -1,4 +1,6 @@
-"""Main module."""
+'''
+Spotify API module
+'''
 
 from pathlib import Path
 from spotipy.oauth2 import SpotifyOAuth
@@ -12,13 +14,13 @@ with open(config_root.joinpath('spotidry.yaml'), 'r') as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id=config.get('client_id'),
-    client_secret=config.get('client_secret'),
-    redirect_uri=config.get('redirect_uri'),
-    scope='user-read-currently-playing user-library-read user-library-modify',
-    cache_path=config_root.joinpath('.cache')
-))
+sp = spotipy.Spotify(
+    auth_manager=SpotifyOAuth(
+        client_id=config.get('client_id'),
+        client_secret=config.get('client_secret'),
+        redirect_uri=config.get('redirect_uri'),
+        scope='user-read-currently-playing user-library-read user-library-modify',
+        cache_path=config_root.joinpath('.cache')))
 
 track = sp.current_user_playing_track()
 # print(track)
