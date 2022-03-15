@@ -28,21 +28,14 @@ if not track:
     print('No track currently playing')
     exit()
 
-print('Artist:', track['item']['artists'][0]['name'])
-print('Song:', track['item']['name'])
-
-if not track['is_playing']:
-    print('Track is paused.')
-    exit()
+artist = track['item']['artists'][0]['name']
+song = track['item']['name']
+play_status = '▶' if track['is_playing'] else '⏸'
 
 track_id = track['item']['id']
-saved = sp.current_user_saved_tracks_contains(tracks=[track_id])[0]
+liked_status = '❤' if sp.current_user_saved_tracks_contains(tracks=[track_id])[0] else '♡'
 
-if saved:
-    print('Track is liked')
-    # print('Un-liking Song')
-    # sp.current_user_saved_tracks_delete(tracks=[track_id])
-else:
-    print('Track is not liked')
-    # print('Liking Song')
-    # sp.current_user_saved_tracks_add(tracks=[track_id])
+print(f'{play_status} {artist} - {song} {liked_status}')
+
+# sp.current_user_saved_tracks_delete(tracks=[track_id])
+# sp.current_user_saved_tracks_add(tracks=[track_id])
