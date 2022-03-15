@@ -21,6 +21,13 @@ class Spotidry():
                 print(exc)
         self.cache_path = config_root.joinpath('.cache')
 
+    def get_play_status(self):
+        return self.track['is_playing']
+
+    def get_liked_status(self):
+        self.track_id = self.track['item']['id']
+        return self.sp.current_user_saved_tracks_contains(tracks=[self.track_id])[0]
+
     def connect(self):
         self.sp = spotipy.Spotify(
             auth_manager=SpotifyOAuth(
@@ -30,29 +37,49 @@ class Spotidry():
                 scope='user-read-currently-playing user-library-read user-library-modify',
                 cache_path=self.cache_path))
 
-    def get_status(self):
-        track = self.sp.current_user_playing_track()
+    def print_stopped(self):
+        print(' ⏹')
 
-        if not track:
-            print(' ⏹')
-            exit()
+    def print_info(self):
+        '''
+        Print a fancy status line
+        '''
+        artist = self.track['item']['artists'][0]['name']
+        song = self.track['item']['name']
+        play_symbol = '▶' if self.get_play_status() else '⏸'
+        liked_symbol = '❤' if self.get_liked_status() else '♡'
+        print(f'{play_symbol} {artist} - {song} {liked_symbol}')
 
-        artist = track['item']['artists'][0]['name']
-        song = track['item']['name']
-        play_status = '▶' if track['is_playing'] else '⏸'
+    def save(self):
+        '''
+        Save song to Liked tracks if not liked yet
+        Remove song from Liked tracks if liked already
+        '''
 
-        track_id = track['item']['id']
-        liked_status = '❤' if self.sp.current_user_saved_tracks_contains(
-            tracks=[track_id])[0] else '♡'
+        if self.get_liked_status():
+            self.sp.current_user_saved_tracks_delete(tracks=[self.track_id])
+        else:
+            self.sp.current_user_saved_tracks_add(tracks=[self.track_id])
 
-        print(f'{play_status} {artist} - {song} {liked_status}')
+    def play(self):
+        print('play')
 
-        # sp.current_user_saved_tracks_delete(tracks=[track_id])
-        # sp.current_user_saved_tracks_add(tracks=[track_id])
+    def next(self):
+        print('next')
 
-    def __init__(self, **kwargs):
+    def previous(self):
+        print('previous')
+
+    def __init__(self):
         '''
         Initialize all the variables
+        Create Spotify API connection
         '''
+
         self.load_config()
         self.connect()
+
+        self.track = self.sp.current_user_playing_track()
+
+        self.get_play_status()
+        self.get_liked_status()
