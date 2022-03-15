@@ -22,10 +22,11 @@ class Spotidry():
         self.connect()
 
         self.track = self.sp.current_user_playing_track()
-        self.play_status = self.track['is_playing']
-        self.track_id = self.track['item']['id']
-        self.liked_status = self.sp.current_user_saved_tracks_contains(
-            tracks=[self.track_id])[0]
+        if self.track:
+            self.play_status = self.track['is_playing']
+            self.track_id = self.track['item']['id']
+            self.liked_status = self.sp.current_user_saved_tracks_contains(
+                tracks=[self.track_id])[0]
 
     def connect(self):
         self.sp = spotipy.Spotify(
@@ -49,7 +50,12 @@ class Spotidry():
         print('next')
 
     def play(self):
-        print('play')
+        if self.play_status:
+            self.play_status = False
+            self.sp.pause_playback()
+        else:
+            self.play_status = True
+            self.sp.start_playback()
 
     def previous(self):
         print('previous')
