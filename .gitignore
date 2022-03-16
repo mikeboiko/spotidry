@@ -1,5 +1,6 @@
 .cache
 __pycache__/
 dist/
+build/
 spotidry/spotidry.egg-info
 tags

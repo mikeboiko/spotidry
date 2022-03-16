@@ -10,11 +10,11 @@ def main():
     '''Console script for spotidry'''
 
     parser = argparse.ArgumentParser(
-        usage='spotidry [-h] [-s] [-p] [--next] [-previous]', description=__doc__)
+        usage='spotidry [-h] [-s] [-p] [-n] [-previous]', description=__doc__)
     parser.add_argument(
         '-s', '--save', action='store_true', help='Toggle liked track status')
     parser.add_argument('-p', '--play', action='store_true', help='Play/Pause track')
-    parser.add_argument('--next', action='store_true', help='Play next track')
+    parser.add_argument('-n', '--next', action='store_true', help='Play next track')
     parser.add_argument(
         '--previous',
         action='store_true',
