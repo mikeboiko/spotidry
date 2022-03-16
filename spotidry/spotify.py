@@ -2,6 +2,7 @@
 Spotify API module
 '''
 
+from appdirs import user_cache_dir
 from pathlib import Path
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
@@ -31,11 +32,12 @@ class Spotidry():
     def connect(self):
         self.sp = spotipy.Spotify(
             auth_manager=SpotifyOAuth(
+                cache_path=user_cache_dir('spotidry'),
                 client_id=self.config.get('client_id'),
                 client_secret=self.config.get('client_secret'),
                 redirect_uri=self.config.get('redirect_uri'),
                 scope='user-read-currently-playing user-library-read user-library-modify',
-                cache_path=self.cache_path))
+            ))
 
     def load_config(self):
         config_root = Path('~/.config/spotidry').expanduser().resolve()
@@ -44,7 +46,6 @@ class Spotidry():
                 self.config = yaml.safe_load(stream)
             except yaml.YAMLError as exc:
                 print(exc)
-        self.cache_path = config_root.joinpath('.cache')
 
     def next(self):
         self.sp.next_track()
