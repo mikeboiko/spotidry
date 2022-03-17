@@ -2,41 +2,20 @@
 Spotify CLI client
 '''
 
-from spotidry.spotify import Spotidry
+from spotidry import __version__
 import argparse
-import sys
 
-def main():
+def parse_args():
     '''Console script for spotidry'''
-
-    parser = argparse.ArgumentParser(
-        usage='spotidry [-h] [-s] [-p] [-n] [-previous]', description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        '-s', '--save', action='store_true', help='Toggle liked track status')
-    parser.add_argument('-p', '--play', action='store_true', help='Play/Pause track')
-    parser.add_argument('-n', '--next', action='store_true', help='Play next track')
+        '-v', '--version', action='version', version='%(prog)s ' + __version__)
+    parser.add_argument(
+        '-s', '--save', action='store_true', help='toggle liked track status')
+    parser.add_argument('-p', '--play', action='store_true', help='play/pause track')
+    parser.add_argument('-n', '--next', action='store_true', help='play next track')
     parser.add_argument(
         '--previous',
         action='store_true',
-        help='Play previous track/skip to beggining of current track')
-    args = parser.parse_args()
-
-    s = Spotidry()
-    if not s.track:
-        s.print_stopped()
-        return 0
-
-    if args.save:
-        s.save()
-    if args.play:
-        s.play()
-    if args.next:
-        s.next()
-    if args.previous:
-        s.previous()
-    s.print_info()
-
-    return 0
-
-if __name__ == "__main__":
-    sys.exit(main())
+        help='play previous track/skip to beggining of current track')
+    return parser.parse_args()

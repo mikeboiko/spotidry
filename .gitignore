@@ -2,5 +2,5 @@
 __pycache__/
 dist/
 build/
-spotidry/spotidry.egg-info
+spotidry.egg-info
 tags
