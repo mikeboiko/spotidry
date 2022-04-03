@@ -2,7 +2,7 @@
 Spotify API module
 '''
 
-from appdirs import user_cache_dir
+from appdirs import user_cache_dir, user_config_dir
 from pathlib import Path
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
@@ -40,10 +40,15 @@ class Spotidry():
             ))
 
     def load_config(self):
-        config_root = Path('~/.config/spotidry').expanduser().resolve()
-        with open(config_root.joinpath('spotidry.yaml'), 'r') as stream:
+        '''Load user config from ~/.config/spotidry/spotidry.yaml
+        Show error message if config file doesn't exist
+        '''
+        config_file = Path(user_config_dir('spotidry')).joinpath('spotidry.yaml')
+        with open(config_file, 'r') as stream:
             try:
                 self.config = yaml.safe_load(stream)
+            except FileNotFoundError as exc:
+                print(exc)
             except yaml.YAMLError as exc:
                 print(exc)
 
