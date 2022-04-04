@@ -32,7 +32,7 @@ class Spotidry():
     def connect(self):
         self.sp = spotipy.Spotify(
             auth_manager=SpotifyOAuth(
-                cache_path=user_cache_dir('spotidry'),
+                cache_path=user_cache_dir('spotidry.json'),
                 client_id=self.config.get('client_id'),
                 client_secret=self.config.get('client_secret'),
                 redirect_uri=self.config.get('redirect_uri'),
