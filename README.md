@@ -20,7 +20,7 @@ My main motivation for this project is to have a simple client that allows me to
 
 One of the best use cases for `spotidry` is to integrate it into an i3/tmux/vim status line. You can also map some key-bindings or foot-pedals to send `spotidry` command.
 
-Below is a demo video showing some basic `spotidry` commands, along with a tmux integration.
+Below, is a demo video showing some basic `spotidry` commands, along with a tmux integration.
 
 ![](https://raw.githubusercontent.com/mikeboiko/spotidry/gif/resources/spotidry.gif)
 
@@ -44,7 +44,7 @@ You can set your redirect URI to something like "http://127.0.0.1:9999"
 
 ## Configuration
 
-Configure Spotify API info in `~/.config/spotidry/spotidry.yaml`
+Configure your Spotify API variables in `~/.config/spotidry/spotidry.yaml`
 
 ```
 client_id: "<ID>"
@@ -68,7 +68,9 @@ TODO: Add sample code for i3
 
 # Usage
 
-Run `spotidry --help` to see instructions.
+The first time you run `spotidry`, you will be prompted to authorize the app in your browser.
+
+Run `spotidry --help` to see all commands/options.
 
 ```
 usage: spotidry [-h] [-v] [-s] [-p] [-n] [--previous]
