@@ -59,7 +59,7 @@ I'm using the popular [.tmux](https://github.com/gpakosz/.tmux) config.
 I have configured `spotidry` to update 1/s in `~/.tmux/.tmux.conf.local`:
 
 ```
-tmux_conf_theme_status_right='#(spotidry 2>/dev/null; sleep 1) #{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+tmux_conf_theme_status_right='#(flock -n /tmp/spotidry.lock spotidry 2>/dev/null; sleep 1) #{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
 ```
 
 ## i3 Integration
