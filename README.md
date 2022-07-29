@@ -64,12 +64,13 @@ tmux_conf_theme_status_right='#(spotidry 2>/dev/null; sleep 1) #{prefix}#{pairin
 
 ## Polybar Integration
 
-Add the following module to `/home/mike/.config/polybar/config.ini`
+Add the following module to `~/.config/polybar/config.ini`
 
 ```
 [module/spotidry]
 type = custom/script
-exec = /home/mike/.local/bin/spotidry
+exec = ~/.local/bin/spotidry
+exec-if = test -f ~/.local/bin/spotidry
 interval = 1
 ```
 
