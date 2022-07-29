@@ -7,7 +7,7 @@
   - [Spotify API](#spotify-api)
   - [Configuration](#configuration)
   - [Tmux Integration](#tmux-integration)
-  - [i3 Integration](#i3-integration)
+  - [Polybar Integration](#polybar-integration)
 - [Usage](#usage)
 - [Roadmap](#roadmap)
 - [Contributions](#contributions)
