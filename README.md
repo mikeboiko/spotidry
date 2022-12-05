@@ -74,6 +74,8 @@ exec-if = test -f ~/.local/bin/spotidry
 interval = 1
 ```
 
+![Polybar screenshot](https://raw.githubusercontent.com/mikeboiko/spotidry/gif/resources/polybar.png)
+
 # Usage
 
 The first time you run `spotidry`, you will be prompted to authorize the app in your browser.
