@@ -18,7 +18,7 @@ Spotidry is a real dry & boring command-line client for Spotify.
 
 My main motivation for this project is to have a simple client that allows me to save the currently-playing song to my Liked Tracks. I also added play/pause/next/previous commands.
 
-One of the best use cases for `spotidry` is to integrate it into an i3/tmux/vim status line. You can also map some key-bindings or foot-pedals to send `spotidry` command.
+One of the best use cases for `spotidry` is to integrate it into a polybar/tmux/vim status line. You can also map some key-bindings or foot-pedals to send `spotidry` command.
 
 Below, is a demo video showing some basic `spotidry` commands, along with a tmux integration.
 
