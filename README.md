@@ -1,6 +1,6 @@
-# Spotidry 
+# Spotidry
 
-- [Spotidry](#spotidry-)
+- [Spotidry](#spotidry)
 - [Summary](#summary)
 - [Installation](#installation)
 - [Setup](#setup)
@@ -101,7 +101,7 @@ options:
 
 - [x] Save currently playing song to Liked Tracks
 - [ ] Add output string customization
-- [ ] Add optional socks/https proxy
+- [ ] Add socks/https proxy option
 
 # Contributions
 
