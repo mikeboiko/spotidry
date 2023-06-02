@@ -100,6 +100,7 @@ options:
 # Roadmap
 
 - [x] Save currently playing song to Liked Tracks
+- [ ] Add volume controls/status
 - [ ] Add output string customization
 - [ ] Add socks/https proxy option
 
