@@ -71,6 +71,9 @@ Add the following module to `~/.config/polybar/config.ini`
 type = custom/script
 exec = ~/.local/bin/spotidry
 exec-if = test -f ~/.local/bin/spotidry
+click-left = ~/.local/bin/spotidry --next 2> /dev/null
+click-middle = ~/.local/bin/spotidry --save 2> /dev/null
+click-right = ~/.local/bin/spotidry --play 2> /dev/null
 interval = 1
 ```
 
