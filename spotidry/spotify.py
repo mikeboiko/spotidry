@@ -2,11 +2,12 @@
 Spotify API module
 '''
 
-from appdirs import user_cache_dir, user_config_dir
 from pathlib import Path
-from spotipy.oauth2 import SpotifyOAuth
+
 import spotipy
 import yaml
+from appdirs import user_cache_dir, user_config_dir
+from spotipy.oauth2 import SpotifyOAuth
 
 class Spotidry():
     '''
@@ -26,8 +27,7 @@ class Spotidry():
         if self.track:
             self.play_status = self.track['is_playing']
             self.track_id = self.track['item']['id']
-            self.liked_status = self.sp.current_user_saved_tracks_contains(
-                tracks=[self.track_id])[0]
+            self.liked_status = self.sp.current_user_saved_tracks_contains(tracks=[self.track_id])[0]
 
     def connect(self):
         self.sp = spotipy.Spotify(
@@ -36,8 +36,10 @@ class Spotidry():
                 client_id=self.config.get('client_id'),
                 client_secret=self.config.get('client_secret'),
                 redirect_uri=self.config.get('redirect_uri'),
-                scope='user-read-currently-playing user-library-read user-library-modify',
-            ))
+                scope=
+                'user-read-currently-playing user-library-read user-library-modify user-modify-playback-state',
+            )
+        )
 
     def load_config(self):
         '''Load user config from ~/.config/spotidry/spotidry.yaml
