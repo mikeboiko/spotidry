@@ -1,4 +1,8 @@
-# 0.0.3 (2023-09-04)
+# 0.0.4 (2024-09-20)
+
+- Swapped play/pause symbols to align with the standard convention
+
+# 0.0.3 (2024-09-04)
 
 - Fixed playback control permissions
 

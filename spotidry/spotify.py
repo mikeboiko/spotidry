@@ -88,7 +88,7 @@ class Spotidry():
         '''
         artist = self.track['item']['artists'][0]['name']
         song = self.track['item']['name']
-        play_symbol = '▶' if self.play_status else '⏸'
+        play_symbol = '⏸' if self.play_status else '▶'
         liked_symbol = '❤' if self.liked_status else '♡'
         print(f'{play_symbol} {artist} - {song} {liked_symbol}')
 
