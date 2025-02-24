@@ -104,9 +104,6 @@ class Spotidry:
         except KeyboardInterrupt:
             print("\nCancelled")
 
-
-
-
     def save(self):
         """
         Save song to Liked tracks if not liked yet
