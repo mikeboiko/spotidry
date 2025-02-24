@@ -4,3 +4,4 @@ dist/
 build/
 spotidry.egg-info
 /tags
+.idea/

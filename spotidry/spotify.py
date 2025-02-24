@@ -3,7 +3,8 @@ Spotify API module
 """
 
 from pathlib import Path
-
+import os
+import webbrowser as wb
 import spotipy
 import yaml
 from appdirs import user_cache_dir, user_config_dir
@@ -46,6 +47,10 @@ class Spotidry:
         Show error message if config file doesn't exist
         """
         config_file = Path(user_config_dir('spotidry')).joinpath('spotidry.yaml')
+
+        if not os.path.exists(config_file):
+            self.setup()
+
         with open(config_file, 'r') as stream:
             try:
                 self.config = yaml.safe_load(stream)
@@ -68,6 +73,39 @@ class Spotidry:
     def previous(self):
         self.sp.previous_track()
         # self.sp.seek_track(0)
+
+    def setup(self):
+        try:
+            config_path = Path(user_config_dir('spotidry'))
+            config_file = config_path.joinpath('spotidry.yaml')
+
+            print("Setting up Spotidry")
+
+            print("Opening Spotify Developer Dashboard...")
+            wb.open_new_tab("https://developer.spotify.com/dashboard/login")
+
+            print("1. Create a new App")
+            print("2. Ensure the 'Web API' is selected")
+
+            client = input("Enter Client ID: ")
+            secret = input("Enter Client Secret: ")
+            uri = input("Enter Redirect URI (Eg http://127.0.0.1:9999): ")
+
+            config = dict(
+                client_id=client,
+                client_secret=secret,
+                redirect_uri=uri,
+            )
+            config_path.mkdir(parents=True, exist_ok=True)
+            with open(config_file, 'w') as file:
+                yaml.dump(config, file)
+
+            print(f"Wrote config to {config_file}")
+        except KeyboardInterrupt:
+            print("\nCancelled")
+
+
+
 
     def save(self):
         """
