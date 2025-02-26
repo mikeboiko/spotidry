@@ -14,6 +14,8 @@ def main():
 
     if args.save:
         s.save()
+    if args.setup:
+        s.setup()
     if args.play:
         s.play()
     if args.next:

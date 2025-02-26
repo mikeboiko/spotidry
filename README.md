@@ -30,6 +30,7 @@ Install `spotidry` from PyPI:
 
 ```sh
 pip install --user spotidry
+spotidry --setup
 ```
 
 Note: I have only tested `spotidry` on Linux.
@@ -39,6 +40,7 @@ Note: I have only tested `spotidry` on Linux.
 ## Spotify API
 
 You will need to register your app at [My Dashboard](https://developer.spotify.com/dashboard/login) to get the credentials necessary to make authorized calls (a client id and client secret).
+Select the `Web API` scope.
 
 You can set your redirect URI to something like "http://127.0.0.1:9999"
 
