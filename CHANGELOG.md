@@ -1,4 +1,8 @@
-# 0.0.5 (2024-09-20)
+# 0.0.6 (2025-02-26)
+
+- Version bump
+
+# 0.0.5 (2025-02-26)
 
 - Merged --setup PR from [nigel-dev](https://github.com/mikeboiko/spotidry/pull/1)
 
