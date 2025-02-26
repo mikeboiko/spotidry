@@ -48,10 +48,10 @@ You can set your redirect URI to something like "http://127.0.0.1:9999"
 
 Configure your Spotify API variables in `~/.config/spotidry/spotidry.yaml`
 
-```json
-client_id: "<ID>"
-client_secret: "<SECRET>"
-redirect_uri: "http://127.0.0.1:9999"
+```yaml
+client_id: '<ID>'
+client_secret: '<SECRET>'
+redirect_uri: 'http://127.0.0.1:9999'
 ```
 
 ## Tmux Integration
@@ -101,7 +101,7 @@ options:
   --previous     play previous track/skip to beggining of current track
 ```
 
-Note, in order to re-authorize, delete `~/.cache/spotidry.json`... yes, I will provide a CLI flag for this eventually.
+Note, in order to re-authorize, delete `~/.cache/spotidry.yaml`... Yes, I will provide a CLI flag for this eventually.
 
 # Roadmap
 

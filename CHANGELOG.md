@@ -1,3 +1,7 @@
+# 0.0.5 (2024-09-20)
+
+- Merged --setup PR from [nigel-dev](https://github.com/mikeboiko/spotidry/pull/1)
+
 # 0.0.4 (2024-09-20)
 
 - Swapped play/pause symbols to align with the standard convention
