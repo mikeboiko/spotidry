@@ -1,6 +1,6 @@
 [project]
 name = "spotidry"
-version = "0.0.2"
+dynamic = ["version"]
 description = "A boring Spotify CLI client"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,6 +26,9 @@ spotidry = "spotidry.__main__:main"
 
 [tool.basedpyright]
 typeCheckingMode = "basic"
+
+[tool.hatch.version]
+path = "spotidry/__init__.py"
 
 [build-system]
 requires = ["hatchling"]

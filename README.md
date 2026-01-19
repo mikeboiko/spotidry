@@ -26,13 +26,39 @@ Below, is a demo video showing some basic `spotidry` commands, along with a tmux
 
 # Installation
 
-Install `spotidry` from PyPI:
+It is recommended to install `spotidry` using [uv](https://docs.astral.sh/uv/):
 
+```bash
+uv tool install spotidry
 ```
+
+Alternatively, you can install from PyPI:
+
+```bash
 pip install --user spotidry
 ```
 
 Note: I have only tested `spotidry` on Linux.
+
+# Development
+
+To set up a local development environment:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mikeboiko/spotidry.git
+   cd spotidry
+   ```
+
+2. Install the tool in editable mode:
+   ```bash
+   uv tool install --editable .
+   ```
+
+3. Run type checking:
+   ```bash
+   uv run basedpyright spotidry
+   ```
 
 # Setup
 
