@@ -248,7 +248,6 @@ wheels = [
 
 [[package]]
 name = "spotidry"
-version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "appdirs" },

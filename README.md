@@ -45,12 +45,14 @@ Note: I have only tested `spotidry` on Linux.
 To set up a local development environment:
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/mikeboiko/spotidry.git
    cd spotidry
    ```
 
 2. Install the tool in editable mode:
+
    ```bash
    uv tool install --editable .
    ```
@@ -59,6 +61,29 @@ To set up a local development environment:
    ```bash
    uv run basedpyright spotidry
    ```
+
+# Deployment
+
+The deployment process to PyPI and GitHub Releases is automated via GitHub Actions.
+
+## Manual Steps
+
+To trigger a new release:
+
+1.  **Update Changelog**: Add release notes for the new version in `CHANGELOG.md`.
+2.  **Bump Version**: Update the version number in `spotidry/__init__.py`.
+3.  **Commit & Push**: Commit these changes and push to the `master` branch.
+
+## Automated Steps
+
+Once the tag is pushed, the GitHub Action will automatically:
+
+1.  Build the package (`sdist` and `wheel`).
+2.  Check the package metadata with `twine`.
+3.  Create a **GitHub Release** with the built artifacts and auto-generated notes.
+4.  Publish the package to **PyPI**.
+
+> **Note**: Ensure the `PYPI_API_TOKEN` secret is set in the GitHub repository settings.
 
 # Setup
 
