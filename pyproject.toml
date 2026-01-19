@@ -17,6 +17,11 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+
 [project.urls]
 "Homepage" = "https://github.com/mikeboiko/spotidry"
 "Bug Tracker" = "https://github.com/mikeboiko/spotidry/issues"
