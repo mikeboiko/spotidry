@@ -26,14 +26,65 @@ Below, is a demo video showing some basic `spotidry` commands, along with a tmux
 
 # Installation
 
-Install `spotidry` from PyPI:
+It is recommended to install `spotidry` using [uv](https://docs.astral.sh/uv/):
 
-```sh
+```bash
+uv tool install spotidry
+```
+
+Alternatively, you can install from PyPI:
+
+```bash
 pip install --user spotidry
 spotidry --setup
 ```
 
 Note: I have only tested `spotidry` on Linux.
+
+# Development
+
+To set up a local development environment:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/mikeboiko/spotidry.git
+   cd spotidry
+   ```
+
+2. Install the tool in editable mode:
+
+   ```bash
+   uv tool install --editable .
+   ```
+
+3. Run type checking:
+   ```bash
+   uv run basedpyright spotidry
+   ```
+
+# Deployment
+
+The deployment process to PyPI and GitHub Releases is automated via GitHub Actions.
+
+## Manual Steps
+
+To trigger a new release:
+
+1.  **Update Changelog**: Add release notes for the new version in `CHANGELOG.md`.
+2.  **Bump Version**: Update the version number in `spotidry/__init__.py`.
+3.  **Commit & Push**: Commit these changes and push to the `master` branch.
+
+## Automated Steps
+
+Once the tag is pushed, the GitHub Action will automatically:
+
+1.  Build the package (`sdist` and `wheel`).
+2.  Check the package metadata with `twine`.
+3.  Create a **GitHub Release** with the built artifacts and auto-generated notes.
+4.  Publish the package to **PyPI**.
+
+> **Note**: Ensure the `PYPI_API_TOKEN` secret is set in the GitHub repository settings.
 
 # Setup
 
@@ -61,7 +112,7 @@ I'm using the popular [.tmux](https://github.com/gpakosz/.tmux) config.
 I have configured `spotidry` to update 1/s in `~/.tmux/.tmux.conf.local`:
 
 ```
-tmux_conf_theme_status_right='#(spotidry 2>/dev/null; sleep 1) #{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+tmux_conf_theme_status_right='#(flock -n /tmp/spotidry.lock spotidry 2>/dev/null; sleep 1) #{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
 ```
 
 ## Polybar Integration
