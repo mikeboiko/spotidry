@@ -125,7 +125,29 @@ class Spotidry:
         song = self.track['item']['name']
         play_symbol = '⏸' if self.play_status else '▶'
         liked_symbol = '❤' if self.liked_status else '♡'
-        print(f'{play_symbol} {artist} - {song} {liked_symbol}')
+
+        default_fmt = '{play_symbol} {artist} - {song} {liked_symbol}'
+        fmt = self.config.get('output_format', default_fmt)
+
+        try:
+            print(
+                fmt.format(
+                    artist=artist,
+                    song=song,
+                    play_symbol=play_symbol,
+                    liked_symbol=liked_symbol,
+                )
+            )
+        except KeyError as e:
+            print(f'Invalid key in output_format: {e}')
+            print(
+                default_fmt.format(
+                    artist=artist,
+                    song=song,
+                    play_symbol=play_symbol,
+                    liked_symbol=liked_symbol,
+                )
+            )
 
     def print_stopped(self):
         print(' ⏹')

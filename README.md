@@ -103,7 +103,15 @@ Configure your Spotify API variables in `~/.config/spotidry/spotidry.yaml`
 client_id: '<ID>'
 client_secret: '<SECRET>'
 redirect_uri: 'http://127.0.0.1:9999'
+output_format: '{play_symbol} {artist} - {song} {liked_symbol}'
 ```
+
+The `output_format` string supports the following placeholders:
+
+- `{artist}`: Artist name
+- `{song}`: Track title
+- `{play_symbol}`: Play/Pause indicator (▶ or ⏸)
+- `{liked_symbol}`: Liked status indicator (❤ or ♡)
 
 ## Tmux Integration
 
@@ -157,8 +165,9 @@ Note, in order to re-authorize, delete `~/.cache/spotidry.yaml`... Yes, I will p
 # Roadmap
 
 - [x] Save currently playing song to Liked Tracks
+- [x] Add output string customization
+- [ ] Scrolling Text for Long Titles
 - [ ] Add volume controls/status
-- [ ] Add output string customization
 - [ ] Add socks/https proxy option
 
 # Contributions
