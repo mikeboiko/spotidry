@@ -3,4 +3,5 @@ __pycache__/
 dist/
 build/
 spotidry.egg-info
-tags
+/tags
+tags.*

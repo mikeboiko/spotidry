@@ -1,3 +1,42 @@
+[project]
+name = "spotidry"
+version = "0.0.2"
+description = "A boring Spotify CLI client"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Mike Boiko", email = "mike@boiko.ca" }]
+dependencies = [
+    "appdirs",
+    "spotipy",
+    "pyyaml",
+    "basedpyright",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mikeboiko/spotidry"
+"Bug Tracker" = "https://github.com/mikeboiko/spotidry/issues"
+
+[project.scripts]
+spotidry = "spotidry.__main__:main"
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
+
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["spotidry"]
+
+[tool.yapf]
+based_on_style = "google"
+spaces_before_comment = 2
+column_limit = 90
+blank_lines_around_top_level_definition = 1
+split_before_first_argument = true
