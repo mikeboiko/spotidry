@@ -3,6 +3,7 @@
 from spotidry import cli, spotify
 import sys
 
+
 def main():
     args = cli.parse_args()
 
@@ -13,6 +14,8 @@ def main():
 
     if args.save:
         s.save()
+    if args.setup:
+        s.setup()
     if args.play:
         s.play()
     if args.next:
@@ -23,5 +26,6 @@ def main():
 
     return 0
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     sys.exit(main())
