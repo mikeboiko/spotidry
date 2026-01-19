@@ -1,3 +1,7 @@
+# 0.0.9 (2026-01-19)
+
+- Scrolling Text for Long Titles
+
 # 0.0.8 (2026-01-18)
 
 - Added output string customization

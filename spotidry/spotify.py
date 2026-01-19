@@ -4,11 +4,23 @@ Spotify API module
 
 from pathlib import Path
 import os
+import time
 import webbrowser as wb
 import spotipy
 import yaml
 from appdirs import user_cache_dir, user_config_dir
 from spotipy.oauth2 import SpotifyOAuth
+
+
+def _scroll_loop(text: str, *, width: int, offset: int, gap: str = '   ') -> str:
+    """Return a fixed-width scrolling window over text in a continuous loop."""
+    if width <= 0 or len(text) <= width:
+        return text
+
+    loop = f'{text}{gap}'
+    start = offset % len(loop)
+    doubled = loop + loop
+    return doubled[start : start + width]
 
 
 class Spotidry:
@@ -53,7 +65,7 @@ class Spotidry:
 
         with open(config_file, 'r') as stream:
             try:
-                self.config = yaml.safe_load(stream)
+                self.config = yaml.safe_load(stream) or {}
             except FileNotFoundError as exc:
                 print(exc)
             except yaml.YAMLError as exc:
@@ -126,7 +138,27 @@ class Spotidry:
         play_symbol = '⏸' if self.play_status else '▶'
         liked_symbol = '❤' if self.liked_status else '♡'
 
-        default_fmt = '{play_symbol} {artist} - {song} {liked_symbol}'
+        artist_song = f'{artist} - {song}'
+
+        max_width = self.config.get('max_width')
+        if max_width is not None:
+            try:
+                width = int(max_width)
+            except (TypeError, ValueError):
+                width = 0
+
+            scroll_speed = self.config.get('scroll_speed', 0.5)
+            scroll_gap = self.config.get('scroll_gap', '   ')
+
+            try:
+                speed = float(scroll_speed)
+            except (TypeError, ValueError):
+                speed = 0.5
+
+            offset = int(time.time() / speed) if speed and speed > 0 else 0
+            artist_song = _scroll_loop(artist_song, width=width, offset=offset, gap=str(scroll_gap))
+
+        default_fmt = '{play_symbol} {artist_song} {liked_symbol}'
         fmt = self.config.get('output_format', default_fmt)
 
         try:
@@ -134,6 +166,7 @@ class Spotidry:
                 fmt.format(
                     artist=artist,
                     song=song,
+                    artist_song=artist_song,
                     play_symbol=play_symbol,
                     liked_symbol=liked_symbol,
                 )
@@ -144,6 +177,7 @@ class Spotidry:
                 default_fmt.format(
                     artist=artist,
                     song=song,
+                    artist_song=artist_song,
                     play_symbol=play_symbol,
                     liked_symbol=liked_symbol,
                 )

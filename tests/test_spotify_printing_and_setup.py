@@ -41,6 +41,34 @@ def test_print_info_invalid_key_falls_back(capsys, sample_track):
     assert '⏸ The Artist - My Song ❤' in out
 
 
+def test_print_info_scrolls_when_max_width_set(capsys, sample_track, monkeypatch):
+    s = Spotidry.__new__(Spotidry)
+    s.track = sample_track
+    s.play_status = True
+    s.liked_status = False
+    s.config = {'max_width': 12, 'scroll_speed': 1.0, 'scroll_gap': '   '}
+
+    monkeypatch.setattr('spotidry.spotify.time.time', lambda: 0)
+    s.print_info()
+    out1 = capsys.readouterr().out.strip()
+
+    monkeypatch.setattr('spotidry.spotify.time.time', lambda: 1)
+    s.print_info()
+    out2 = capsys.readouterr().out.strip()
+
+    assert out1 != out2
+
+    assert out1.startswith('⏸ ')
+    assert out1.endswith(' ♡')
+    seg1 = out1[len('⏸ ') : -len(' ♡')]
+    assert seg1 == 'The Artist -'
+
+    assert out2.startswith('⏸ ')
+    assert out2.endswith(' ♡')
+    seg2 = out2[len('⏸ ') : -len(' ♡')]
+    assert seg2 == 'he Artist - '
+
+
 def test_print_stopped(capsys):
     s = Spotidry.__new__(Spotidry)
     s.print_stopped()

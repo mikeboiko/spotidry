@@ -103,13 +103,19 @@ Configure your Spotify API variables in `~/.config/spotidry/spotidry.yaml`
 client_id: '<ID>'
 client_secret: '<SECRET>'
 redirect_uri: 'http://127.0.0.1:9999'
-output_format: '{play_symbol} {artist} - {song} {liked_symbol}'
+output_format: '{play_symbol} {artist_song} {liked_symbol}'
+
+# Optional: scrolling for long titles (meant for 1Hz status lines like tmux/polybar)
+max_width: 30
+scroll_speed: 0.5
+scroll_gap: '   '
 ```
 
 The `output_format` string supports the following placeholders:
 
 - `{artist}`: Artist name
 - `{song}`: Track title
+- `{artist_song}`: Convenience string of `"{artist} - {song}"` (and the one that scrolls)
 - `{play_symbol}`: Play/Pause indicator (▶ or ⏸)
 - `{liked_symbol}`: Liked status indicator (❤ or ♡)
 
@@ -166,7 +172,7 @@ Note, in order to re-authorize, delete `~/.cache/spotidry.yaml`... Yes, I will p
 
 - [x] Save currently playing song to Liked Tracks
 - [x] Add output string customization
-- [ ] Scrolling Text for Long Titles
+- [x] Scrolling Text for Long Titles
 - [ ] Add volume controls/status
 - [ ] Add socks/https proxy option
 
