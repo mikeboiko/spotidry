@@ -1,3 +1,8 @@
+# 0.0.7 (2026-01-18)
+
+- Switch to uv package manager
+- Deploy via GH Actions
+
 # 0.0.6 (2025-02-26)
 
 - Version bump
