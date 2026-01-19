@@ -79,17 +79,17 @@ class Spotidry:
             config_path = Path(user_config_dir('spotidry'))
             config_file = config_path.joinpath('spotidry.yaml')
 
-            print("Setting up Spotidry")
+            print('Setting up Spotidry')
 
-            print("Opening Spotify Developer Dashboard...")
-            wb.open_new_tab("https://developer.spotify.com/dashboard/login")
+            print('Opening Spotify Developer Dashboard...')
+            wb.open_new_tab('https://developer.spotify.com/dashboard/login')
 
-            print("1. Create a new App")
+            print('1. Create a new App')
             print("2. Ensure the 'Web API' is selected")
 
-            client = input("Enter Client ID: ")
-            secret = input("Enter Client Secret: ")
-            uri = input("Enter Redirect URI (Eg http://127.0.0.1:9999): ")
+            client = input('Enter Client ID: ')
+            secret = input('Enter Client Secret: ')
+            uri = input('Enter Redirect URI (Eg http://127.0.0.1:9999): ')
 
             config = dict(
                 client_id=client,
@@ -100,9 +100,9 @@ class Spotidry:
             with open(config_file, 'w') as file:
                 yaml.dump(config, file)
 
-            print(f"Wrote config to {config_file}")
+            print(f'Wrote config to {config_file}')
         except KeyboardInterrupt:
-            print("\nCancelled")
+            print('\nCancelled')
 
     def save(self):
         """

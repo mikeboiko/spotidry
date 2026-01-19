@@ -8,7 +8,7 @@ pre-commit:
       stage_fixed: true
 
     ruff-format:
-      glob: 'api_testing_suite/**/*.py'
+      glob: '**/*.py'
       run: |
         echo "Formatting python files with ruff..."
         uv run ruff format {staged_files}
