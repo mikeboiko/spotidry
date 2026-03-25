@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from spotidry.spotify import Spotidry
 
-from conftest import FakeSpotify, SpotifyCallLog
+from tests.conftest import FakeSpotify, SpotifyCallLog
 
 
 def test_init_sets_state_from_current_track(monkeypatch, sample_track):
