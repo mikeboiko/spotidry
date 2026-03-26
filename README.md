@@ -73,16 +73,19 @@ To trigger a new release:
 
 1.  **Update Changelog**: Add release notes for the new version in `CHANGELOG.md`.
 2.  **Bump Version**: Update the version number in `spotidry/__init__.py`.
-3.  **Commit & Push**: Commit these changes and push to the `master` branch.
+3.  **Push to `master`**: Commit the release changes and push them to the `master` branch.
 
 ## Automated Steps
 
-Once the tag is pushed, the GitHub Action will automatically:
+After the `Tests` workflow succeeds for that push on `master`, GitHub Actions will automatically:
 
-1.  Build the package (`sdist` and `wheel`).
-2.  Check the package metadata with `twine`.
-3.  Create a **GitHub Release** with the built artifacts and auto-generated notes.
-4.  Publish the package to **PyPI**.
+1.  Create and push a Git tag that matches the version in `spotidry/__init__.py` (for example `0.0.10`).
+2.  Build the package (`sdist` and `wheel`).
+3.  Check the package metadata with `twine`.
+4.  Create a **GitHub Release** with the built artifacts and auto-generated notes.
+5.  Publish the package to **PyPI**.
+
+Only pushes that change `spotidry/__init__.py` are treated as releases. If the version tag already exists on a different commit, the workflow fails so the version can be bumped before merging another release.
 
 > **Note**: Ensure the `PYPI_API_TOKEN` secret is set in the GitHub repository settings.
 

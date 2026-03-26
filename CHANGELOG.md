@@ -1,5 +1,7 @@
 # Unreleased
 
+- Automate release tag creation in GitHub Actions based on the version in `spotidry/__init__.py`.
+
 # 0.0.10 (2026-03-26)
 
 - Cache playback status between frequent CLI invocations so 1Hz status bars do not hit Spotify on every refresh.
