@@ -29,7 +29,7 @@ def test_load_config_calls_setup_when_missing(tmp_path, monkeypatch):
     monkeypatch.setattr('spotidry.spotify.user_config_dir', lambda _: str(cfg_dir))
     monkeypatch.setattr(os.path, 'exists', lambda p: False)
 
-    def fake_setup(self):
+    def fake_setup(_self):
         cfg_dir.mkdir(parents=True, exist_ok=True)
         (cfg_dir / 'spotidry.yaml').write_text(
             'client_id: id\nclient_secret: secret\nredirect_uri: http://127.0.0.1:9999\n'
@@ -70,8 +70,13 @@ def test_connect_wires_spotify_oauth(monkeypatch):
             created['oauth_kwargs'] = kwargs
 
     class FakeSpotify:
-        def __init__(self, *, auth_manager):
-            created['auth_manager'] = auth_manager
+        def __init__(self, *, auth_manager, retries, status_retries, backoff_factor):
+            created['spotify_kwargs'] = {
+                'auth_manager': auth_manager,
+                'retries': retries,
+                'status_retries': status_retries,
+                'backoff_factor': backoff_factor,
+            }
 
     s = Spotidry.__new__(Spotidry)
     s.config = {'client_id': 'id', 'client_secret': 'secret', 'redirect_uri': 'http://127.0.0.1:9999'}
@@ -84,4 +89,7 @@ def test_connect_wires_spotify_oauth(monkeypatch):
 
     assert created['oauth_kwargs']['client_id'] == 'id'
     assert 'user-read-currently-playing' in created['oauth_kwargs']['scope']
-    assert created['auth_manager'].__class__ is FakeOAuth
+    assert created['spotify_kwargs']['auth_manager'].__class__ is FakeOAuth
+    assert created['spotify_kwargs']['retries'] == 0
+    assert created['spotify_kwargs']['status_retries'] == 0
+    assert created['spotify_kwargs']['backoff_factor'] == 0

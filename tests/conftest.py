@@ -26,6 +26,8 @@ def sample_track():
 
 @dataclass
 class SpotifyCallLog:
+    current_user_playing_track: int = 0
+    saved_tracks_contains: int = 0
     next_track: int = 0
     previous_track: int = 0
     pause_playback: int = 0
@@ -45,10 +47,12 @@ class FakeSpotify:
         self.log = log or SpotifyCallLog()
 
     def current_user_playing_track(self):
+        self.log.current_user_playing_track += 1
         return self._track
 
     def current_user_saved_tracks_contains(self, *, tracks):
         assert isinstance(tracks, list)
+        self.log.saved_tracks_contains += 1
         return [self._liked]
 
     def next_track(self):

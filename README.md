@@ -29,7 +29,7 @@ Below, is a demo video showing some basic `spotidry` commands, along with a tmux
 It is recommended to install `spotidry` using [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv tool install spotidry
+uv tool install -e .
 ```
 
 Alternatively, you can install from PyPI:
@@ -109,6 +109,9 @@ output_format: '{play_symbol} {artist_song} {liked_symbol}'
 max_width: 30
 scroll_speed: 0.5
 scroll_gap: '   '
+
+# Optional: reuse recent playback data between CLI invocations
+status_cache_seconds: 5
 ```
 
 The `output_format` string supports the following placeholders:
@@ -119,15 +122,21 @@ The `output_format` string supports the following placeholders:
 - `{play_symbol}`: Play/Pause indicator (▶ or ⏸)
 - `{liked_symbol}`: Liked status indicator (❤ or ♡)
 
+Use `status_cache_seconds` to control how often `spotidry` asks Spotify for fresh playback data. The default of `5` keeps 1 Hz status bars smooth while limiting Spotify requests to about once every 5 seconds. Increase the value if you still hit rate limits, or set it to `0` to fetch fresh data on every run.
+
+Recent playback data is cached in `~/.cache/spotidry/status_cache.json`. If Spotify temporarily returns a rate limit response, `spotidry` will continue showing the most recent cached status instead of waiting on a long retry.
+
 ## Tmux Integration
 
-I'm using the popular [.tmux](https://github.com/gpakosz/.tmux) config.
-
-I have configured `spotidry` to update 1/s in `~/.tmux/.tmux.conf.local`:
+Example for the popular [.tmux](https://github.com/gpakosz/.tmux) config:
 
 ```
 tmux_conf_theme_status_right='#(flock -n /tmp/spotidry.lock spotidry 2>/dev/null; sleep 1) #{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
 ```
+
+This example redraws once per second for smooth scrolling. With the default `status_cache_seconds: 5`, Spotify is still refreshed only about once every 5 seconds.
+
+If 1 Hz scrolling is not necessary, increase the shell `sleep` to reduce API traffic even further.
 
 ## Polybar Integration
 
@@ -143,6 +152,10 @@ click-middle = ~/.local/bin/spotidry --save 2> /dev/null
 click-right = ~/.local/bin/spotidry --play 2> /dev/null
 interval = 1
 ```
+
+This example uses `interval = 1` for smooth scrolling. With the default cache settings, Spotify is still refreshed only about once every 5 seconds.
+
+To reduce API traffic further, either raise `status_cache_seconds` or increase the Polybar `interval`.
 
 ![Polybar screenshot](https://raw.githubusercontent.com/mikeboiko/spotidry/gif/resources/polybar.png)
 

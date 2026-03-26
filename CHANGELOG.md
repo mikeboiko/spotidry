@@ -1,3 +1,10 @@
+# Unreleased
+
+# 0.0.10 (2026-03-26)
+
+- Cache playback status between frequent CLI invocations so 1Hz status bars do not hit Spotify on every refresh.
+- Reuse stale cached status during Spotify `429` responses and fail fast instead of waiting on long retry windows.
+
 # 0.0.9 (2026-01-19)
 
 - Scrolling Text for Long Titles

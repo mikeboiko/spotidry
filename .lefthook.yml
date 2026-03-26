@@ -1,4 +1,5 @@
 pre-commit:
+  parallel: True
   commands:
     prettier-format:
       glob: '**/*.{js,jsx,ts,tsx,json,css,scss,md,yaml,yml}'
