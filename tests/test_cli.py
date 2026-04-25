@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 
 from spotidry import cli
+import pytest
 
 
 def test_parse_args_defaults(monkeypatch):
@@ -34,3 +35,15 @@ def test_parse_args_flags(monkeypatch):
     assert args.play is True
     assert args.next is True
     assert args.previous is True
+
+
+def test_parse_args_help_text(monkeypatch, capsys):
+    monkeypatch.setattr(sys, 'argv', ['spotidry', '--help'])
+
+    with pytest.raises(SystemExit) as exc:
+        cli.parse_args()
+
+    assert exc.value.code == 0
+    out = capsys.readouterr().out
+    assert '-S, --setup' in out
+    assert 'play previous track/skip to beginning of current track' in out

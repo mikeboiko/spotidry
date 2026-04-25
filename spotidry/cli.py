@@ -15,6 +15,6 @@ def parse_args():
     parser.add_argument('-p', '--play', action='store_true', help='play/pause track')
     parser.add_argument('-n', '--next', action='store_true', help='play next track')
     parser.add_argument(
-        '--previous', action='store_true', help='play previous track/skip to beggining of current track'
+        '--previous', action='store_true', help='play previous track/skip to beginning of current track'
     )
     return parser.parse_args()

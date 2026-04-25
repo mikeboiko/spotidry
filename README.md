@@ -1,106 +1,52 @@
 # Spotidry
 
-- [Spotidry](#spotidry)
-- [Summary](#summary)
-- [Installation](#installation)
-- [Setup](#setup)
-  - [Spotify API](#spotify-api)
-  - [Configuration](#configuration)
-  - [Tmux Integration](#tmux-integration)
-  - [Polybar Integration](#polybar-integration)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Contributions](#contributions)
+[![Tests](https://github.com/mikeboiko/spotidry/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/mikeboiko/spotidry/actions/workflows/tests.yml)
+[![Publish to PyPI](https://github.com/mikeboiko/spotidry/actions/workflows/publish.yml/badge.svg?branch=master)](https://github.com/mikeboiko/spotidry/actions/workflows/publish.yml)
+[![PyPI version](https://img.shields.io/pypi/v/spotidry)](https://pypi.org/project/spotidry/)
+[![Python 3.10+](https://img.shields.io/pypi/pyversions/spotidry)](https://pypi.org/project/spotidry/)
 
-# Summary
+Spotidry is a deliberately minimal Spotify CLI for status bars, hotkeys, and quick playback control.
 
-Spotidry is a real dry & boring command-line client for Spotify.
+It prints the current track in a compact one-line format, lets you toggle the current song in your Liked Songs, and exposes the playback controls you need without turning your terminal into a full music client.
 
-My main motivation for this project is to have a simple client that allows me to save the currently-playing song to my Liked Tracks. I also added play/pause/next/previous commands.
+![Spotidry demo](https://raw.githubusercontent.com/mikeboiko/spotidry/gif/resources/spotidry.gif)
 
-One of the best use cases for `spotidry` is to integrate it into a polybar/tmux/vim status line. You can also map some key-bindings or foot-pedals to send `spotidry` command.
+## What it does well
 
-Below, is a demo video showing some basic `spotidry` commands, along with a tmux integration.
+- Print the current Spotify status in a customizable format.
+- Toggle the current track in your Liked Songs with a single command.
+- Control playback with play/pause, next, and previous actions.
+- Scroll long artist/title strings cleanly in narrow status bars.
+- Reuse recent playback data to keep 1 Hz status lines responsive and avoid unnecessary Spotify requests.
 
-![](https://raw.githubusercontent.com/mikeboiko/spotidry/gif/resources/spotidry.gif)
+## Installation
 
-# Installation
-
-It is recommended to install `spotidry` using [uv](https://docs.astral.sh/uv/):
+Install from PyPI with `uv`:
 
 ```bash
-uv tool install -e .
+uv tool install spotidry
+spotidry --setup
 ```
 
-Alternatively, you can install from PyPI:
+Or install with `pip`:
 
 ```bash
 pip install --user spotidry
 spotidry --setup
 ```
 
-Note: I have only tested `spotidry` on Linux.
+Spotidry is currently tested on Linux.
 
-# Development
+## Spotify setup
 
-To set up a local development environment:
+Run `spotidry --setup` to create the config file interactively. The command opens the Spotify Developer Dashboard and prompts you for the values it needs.
 
-1. Clone the repository:
+1. Create a Spotify app at [My Dashboard](https://developer.spotify.com/dashboard/login).
+2. Make sure the app has **Web API** enabled.
+3. Set a redirect URI such as `http://127.0.0.1:9999`.
+4. Paste the Client ID, Client Secret, and Redirect URI into the setup prompt.
 
-   ```bash
-   git clone https://github.com/mikeboiko/spotidry.git
-   cd spotidry
-   ```
-
-2. Install the tool in editable mode:
-
-   ```bash
-   uv tool install --editable .
-   ```
-
-3. Run type checking:
-   ```bash
-   uv run basedpyright spotidry
-   ```
-
-# Deployment
-
-The deployment process to PyPI and GitHub Releases is automated via GitHub Actions.
-
-## Manual Steps
-
-To trigger a new release:
-
-1.  **Update Changelog**: Add release notes for the new version in `CHANGELOG.md`.
-2.  **Bump Version**: Update the version number in `spotidry/__init__.py`.
-3.  **Push to `master`**: Commit the release changes and push them to the `master` branch.
-
-## Automated Steps
-
-After the `Tests` workflow succeeds for that push on `master`, GitHub Actions will automatically:
-
-1.  Create and push a Git tag that matches the version in `spotidry/__init__.py` (for example `0.0.10`).
-2.  Build the package (`sdist` and `wheel`).
-3.  Check the package metadata with `twine`.
-4.  Create a **GitHub Release** with the built artifacts and auto-generated notes.
-5.  Publish the package to **PyPI**.
-
-Only pushes that change `spotidry/__init__.py` are treated as releases. If the version tag already exists on a different commit, the workflow fails so the version can be bumped before merging another release.
-
-> **Note**: Ensure the `PYPI_API_TOKEN` secret is set in the GitHub repository settings.
-
-# Setup
-
-## Spotify API
-
-You will need to register your app at [My Dashboard](https://developer.spotify.com/dashboard/login) to get the credentials necessary to make authorized calls (a client id and client secret).
-Select the `Web API` scope.
-
-You can set your redirect URI to something like "http://127.0.0.1:9999"
-
-## Configuration
-
-Configure your Spotify API variables in `~/.config/spotidry/spotidry.yaml`
+If you prefer to create the config manually, write this file to `~/.config/spotidry/spotidry.yaml`:
 
 ```yaml
 client_id: '<ID>'
@@ -108,7 +54,7 @@ client_secret: '<SECRET>'
 redirect_uri: 'http://127.0.0.1:9999'
 output_format: '{play_symbol} {artist_song} {liked_symbol}'
 
-# Optional: scrolling for long titles (meant for 1Hz status lines like tmux/polybar)
+# Optional: scrolling for long titles (useful for 1 Hz status lines)
 max_width: 30
 scroll_speed: 0.5
 scroll_gap: '   '
@@ -117,35 +63,84 @@ scroll_gap: '   '
 status_cache_seconds: 5
 ```
 
-The `output_format` string supports the following placeholders:
+On the first normal run, Spotidry opens a browser window so you can authorize access to your Spotify account.
 
-- `{artist}`: Artist name
-- `{song}`: Track title
-- `{artist_song}`: Convenience string of `"{artist} - {song}"` (and the one that scrolls)
-- `{play_symbol}`: Play/Pause indicator (▶ or ⏸)
-- `{liked_symbol}`: Liked status indicator (❤ or ♡)
+## Configuration
 
-Use `status_cache_seconds` to control how often `spotidry` asks Spotify for fresh playback data. The default of `5` keeps 1 Hz status bars smooth while limiting Spotify requests to about once every 5 seconds. Increase the value if you still hit rate limits, or set it to `0` to fetch fresh data on every run.
+### Output placeholders
 
-Recent playback data is cached in `~/.cache/spotidry/status_cache.json`. If Spotify temporarily returns a rate limit response, `spotidry` will continue showing the most recent cached status instead of waiting on a long retry.
+`output_format` supports these placeholders:
 
-## Tmux Integration
+- `{artist}`: artist name
+- `{song}`: track title
+- `{artist_song}`: `"{artist} - {song}"`, including scrolling when enabled
+- `{play_symbol}`: playback indicator (`▶` or `⏸`)
+- `{liked_symbol}`: liked indicator (`❤` or `♡`)
+
+The default output format is:
+
+```text
+{play_symbol} {artist_song} {liked_symbol}
+```
+
+### Caching and rate limits
+
+`status_cache_seconds` controls how often Spotidry asks Spotify for fresh playback data. The default of `5` works well for 1 Hz status bars while keeping API traffic low.
+
+- Increase it if your status line refreshes frequently and you still hit rate limits.
+- Set it to `0` to fetch fresh data on every invocation.
+
+Recent playback data is cached at `~/.cache/spotidry/status_cache.json`. If Spotify temporarily replies with `429 Too Many Requests`, Spotidry can keep showing the most recent cached status instead of waiting on a long retry window.
+
+## Usage
+
+Common commands:
+
+```bash
+spotidry
+spotidry --save
+spotidry --play
+spotidry --next
+spotidry --previous
+spotidry --setup
+```
+
+CLI help:
+
+```text
+usage: spotidry [-h] [-v] [-s] [-S] [-p] [-n] [--previous]
+
+Spotify CLI client
+
+options:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+  -s, --save     toggle liked track status
+  -S, --setup    setup spotidry configuration
+  -p, --play     play/pause track
+  -n, --next     play next track
+  --previous     play previous track/skip to beginning of current track
+```
+
+If you need to re-authorize Spotify, delete the auth cache at `~/.cache/spotidry.json` and run Spotidry again.
+
+## Tmux integration
 
 Example for the popular [.tmux](https://github.com/gpakosz/.tmux) config:
 
-```
+```tmux
 tmux_conf_theme_status_right='#(flock -n /tmp/spotidry.lock spotidry 2>/dev/null; sleep 1) #{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
 ```
 
-This example redraws once per second for smooth scrolling. With the default `status_cache_seconds: 5`, Spotify is still refreshed only about once every 5 seconds.
+This redraws once per second for smooth scrolling. With the default `status_cache_seconds: 5`, Spotify is still refreshed only about once every 5 seconds.
 
-If 1 Hz scrolling is not necessary, increase the shell `sleep` to reduce API traffic even further.
+If you do not need 1 Hz scrolling, increase the shell `sleep` to reduce API traffic even further.
 
-## Polybar Integration
+## Polybar integration
 
-Add the following module to `~/.config/polybar/config.ini`
+Add this module to `~/.config/polybar/config.ini`:
 
-```
+```ini
 [module/spotidry]
 type = custom/script
 exec = ~/.local/bin/spotidry
@@ -156,44 +151,57 @@ click-right = ~/.local/bin/spotidry --play 2> /dev/null
 interval = 1
 ```
 
-This example uses `interval = 1` for smooth scrolling. With the default cache settings, Spotify is still refreshed only about once every 5 seconds.
+This uses `interval = 1` for smooth scrolling. With the default cache settings, Spotify is still refreshed only about once every 5 seconds.
 
 To reduce API traffic further, either raise `status_cache_seconds` or increase the Polybar `interval`.
 
 ![Polybar screenshot](https://raw.githubusercontent.com/mikeboiko/spotidry/gif/resources/polybar.png)
 
-# Usage
+## Development
 
-The first time you run `spotidry`, you will be prompted to authorize the app in your browser.
+Set up a local development environment:
 
-Run `spotidry --help` to see all commands/options.
-
-```
-usage: spotidry [-h] [-v] [-s] [-p] [-n] [--previous]
-
-Spotify CLI client
-
-options:
-  -h, --help     show this help message and exit
-  -v, --version  show program's version number and exit
-  -s, --save     toggle liked track status
-  -p, --play     play/pause track
-  -n, --next     play next track
-  --previous     play previous track/skip to beggining of current track
+```bash
+git clone https://github.com/mikeboiko/spotidry.git
+cd spotidry
+uv sync --extra test
 ```
 
-Note, in order to re-authorize, delete `~/.cache/spotidry.yaml`... Yes, I will provide a CLI flag for this eventually.
+Useful development commands:
 
-# Roadmap
+```bash
+uv run pytest -q
+uv run basedpyright spotidry
+uv run spotidry --help
+```
 
-- [x] Save currently playing song to Liked Tracks
+## Release automation
+
+GitHub Actions handles validation and publishing:
+
+- **Tests** runs on every push, pull request, and manual dispatch.
+- **Publish to PyPI** runs after a successful `Tests` run on `master`.
+- A release is only created when `spotidry/__init__.py` changes and the version is bumped.
+
+Routine commits should leave `spotidry/__init__.py` and `CHANGELOG.md` alone. Update them together only when preparing an actual release.
+
+When a release is triggered, GitHub Actions will:
+
+1. Create and push the matching Git tag.
+2. Build the source distribution and wheel.
+3. Validate the package with `twine check`.
+4. Create a GitHub Release with the built artifacts.
+5. Publish the package to PyPI.
+
+Make sure the repository has a `PYPI_API_TOKEN` secret configured.
+
+## Roadmap
+
+- [x] Save the currently playing song to Liked Songs
 - [x] Add output string customization
-- [x] Scrolling Text for Long Titles
-- [ ] Add volume controls/status
-- [ ] Add socks/https proxy option
+- [x] Add scrolling text for long titles
+- [ ] Add volume controls and status
 
-# Contributions
+## Contributing
 
-Contributions are always welcome!
-
-Feel free to submit an issue or a pull request.
+Issues and pull requests are welcome.
