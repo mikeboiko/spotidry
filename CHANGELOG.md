@@ -1,3 +1,7 @@
+# 0.0.12 (2026-04-25)
+
+- Fix `--volume-show` reporting "Volume unavailable" instead of the current device volume.
+
 # 0.0.11 (2026-04-25)
 
 - Add `--volume-show`, `--volume-up`, and `--volume-down` commands for current device volume without changing the default status output.

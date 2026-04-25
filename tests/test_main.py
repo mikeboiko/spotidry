@@ -147,3 +147,28 @@ def test_main_volume_flags_print_volume(monkeypatch):
     rc = __main__.main()
     assert rc == 0
     assert fake.calls == ['volume_up', ('print_volume', 60)]
+
+
+def test_main_volume_show_calls_print_volume_without_arg(monkeypatch):
+    fake = FakeSpotidry(track_present=False)
+    monkeypatch.setattr(
+        __main__.cli,
+        'parse_args',
+        lambda: Namespace(
+            save=False,
+            setup=False,
+            play=False,
+            next=False,
+            previous=False,
+            volume_show=True,
+            volume_up=False,
+            volume_down=False,
+        ),
+    )
+    monkeypatch.setattr(__main__.spotify, 'Spotidry', lambda **_kwargs: fake)
+
+    rc = __main__.main()
+    assert rc == 0
+    # volume_show alone should call print_volume with no explicit volume
+    # so it uses AUTO_VOLUME to fetch the current volume from the API
+    assert fake.calls == [('print_volume', None)]

@@ -21,6 +21,10 @@ This repository contains a command-line client for Spotify.
 - **Release Prep**: When asked to prepare a release, bump `spotidry/__init__.py`, add a versioned changelog section for that release, and move the relevant notes into it.
 - **Clarify**: If a task might imply a release, ask before changing versioning or other release metadata.
 
+## Manual Testing
+
+- After making changes to CLI or API features, always verify them against the live Spotify API by running the relevant commands (e.g., `uv run spotidry --volume-show`, `uv run spotidry --volume-up`). Do not rely solely on unit tests for validation.
+
 ## Documentation
 
 - Add comments for complex logic.

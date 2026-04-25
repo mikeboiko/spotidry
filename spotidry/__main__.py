@@ -43,7 +43,10 @@ def main():
             s.print_stopped()
             return 0
     if volume_actions_requested:
-        s.print_volume(volume_percent=current_volume)
+        if current_volume is not None:
+            s.print_volume(volume_percent=current_volume)
+        else:
+            s.print_volume()
         return 0
     s.print_info()
 
