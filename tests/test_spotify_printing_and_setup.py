@@ -75,6 +75,18 @@ def test_print_stopped(capsys):
     assert capsys.readouterr().out.strip() == ' ⏹'
 
 
+def test_print_volume_uses_explicit_value(capsys):
+    s = Spotidry.__new__(Spotidry)
+    s.print_volume(volume_percent=73)
+    assert capsys.readouterr().out.strip() == '73%'
+
+
+def test_print_volume_handles_unavailable_value(capsys):
+    s = Spotidry.__new__(Spotidry)
+    s.print_volume(volume_percent=None)
+    assert capsys.readouterr().out.strip() == 'Volume unavailable'
+
+
 def test_setup_writes_config_file(tmp_path, monkeypatch):
     cfg_dir = tmp_path / 'spotidry'
     monkeypatch.setattr('spotidry.spotify.user_config_dir', lambda _: str(cfg_dir))

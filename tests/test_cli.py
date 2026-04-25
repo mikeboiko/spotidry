@@ -14,6 +14,9 @@ def test_parse_args_defaults(monkeypatch):
     assert args.play is False
     assert args.next is False
     assert args.previous is False
+    assert args.volume_show is False
+    assert args.volume_up is False
+    assert args.volume_down is False
 
 
 def test_parse_args_flags(monkeypatch):
@@ -27,6 +30,9 @@ def test_parse_args_flags(monkeypatch):
             '--next',
             '--previous',
             '--setup',
+            '--volume-show',
+            '--volume-up',
+            '--volume-down',
         ],
     )
     args = cli.parse_args()
@@ -35,6 +41,9 @@ def test_parse_args_flags(monkeypatch):
     assert args.play is True
     assert args.next is True
     assert args.previous is True
+    assert args.volume_show is True
+    assert args.volume_up is True
+    assert args.volume_down is True
 
 
 def test_parse_args_help_text(monkeypatch, capsys):
@@ -47,3 +56,6 @@ def test_parse_args_help_text(monkeypatch, capsys):
     out = capsys.readouterr().out
     assert '-S, --setup' in out
     assert 'play previous track/skip to beginning of current track' in out
+    assert '--volume-show' in out
+    assert '--volume-up' in out
+    assert '--volume-down' in out

@@ -102,13 +102,17 @@ spotidry --save
 spotidry --play
 spotidry --next
 spotidry --previous
+spotidry --volume-show
+spotidry --volume-up
+spotidry --volume-down
 spotidry --setup
 ```
 
 CLI help:
 
 ```text
-usage: spotidry [-h] [-v] [-s] [-S] [-p] [-n] [--previous]
+usage: spotidry [-h] [-v] [-s] [-S] [-p] [-n] [--previous] [--volume-show]
+                [--volume-up] [--volume-down]
 
 Spotify CLI client
 
@@ -120,9 +124,14 @@ options:
   -p, --play     play/pause track
   -n, --next     play next track
   --previous     play previous track/skip to beginning of current track
+  --volume-show  print current device volume
+  --volume-up    increase current device volume by 10%
+  --volume-down  decrease current device volume by 10%
 ```
 
-If you need to re-authorize Spotify, delete the auth cache at `~/.cache/spotidry.json` and run Spotidry again.
+The volume commands print only the current volume. They do not add volume to the default `spotidry` status line.
+
+If you need to re-authorize Spotify, delete the auth cache at `~/.cache/spotidry.json` and run Spotidry again. If you are upgrading from an older release, re-authorizing may be necessary for the new playback-state scope used by the volume commands.
 
 ## Tmux integration
 
@@ -196,13 +205,6 @@ When a release is triggered, GitHub Actions will:
 5. Publish the package to PyPI.
 
 Make sure the repository has a `PYPI_API_TOKEN` secret configured.
-
-## Roadmap
-
-- [x] Save the currently playing song to Liked Songs
-- [x] Add output string customization
-- [x] Add scrolling text for long titles
-- [ ] Add volume controls and status
 
 ## Contributing
 

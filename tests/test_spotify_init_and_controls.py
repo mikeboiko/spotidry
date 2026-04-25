@@ -87,3 +87,23 @@ def test_next_previous_call_api(monkeypatch, sample_track):
     s.previous()
     assert log.next_track == 1
     assert log.previous_track == 1
+
+
+def test_volume_controls_adjust_current_device_volume(monkeypatch, sample_track):
+    log = SpotifyCallLog()
+    playback = {'device': {'id': 'device123', 'volume_percent': 55}}
+
+    def fake_load_config(self):
+        self.config = {'client_id': 'id', 'client_secret': 'secret', 'redirect_uri': 'http://127.0.0.1:9999'}
+
+    def fake_connect(self):
+        self.sp = FakeSpotify(track=sample_track, playback=playback, liked=False, log=log)
+
+    monkeypatch.setattr(Spotidry, 'load_config', fake_load_config)
+    monkeypatch.setattr(Spotidry, 'connect', fake_connect)
+
+    s = Spotidry()
+
+    assert s.volume_up() == 65
+    assert s.volume_down() == 55
+    assert log.volume == [(65, 'device123'), (55, 'device123')]

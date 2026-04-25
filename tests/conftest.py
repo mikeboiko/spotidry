@@ -27,28 +27,36 @@ def sample_track():
 @dataclass
 class SpotifyCallLog:
     current_user_playing_track: int = 0
+    current_playback: int = 0
     saved_tracks_contains: int = 0
     next_track: int = 0
     previous_track: int = 0
     pause_playback: int = 0
     start_playback: int = 0
+    volume: list[tuple[int, str | None]] | None = None
     saved_tracks_add: list[list[str]] | None = None
     saved_tracks_delete: list[list[str]] | None = None
 
     def __post_init__(self):
+        self.volume = []
         self.saved_tracks_add = []
         self.saved_tracks_delete = []
 
 
 class FakeSpotify:
-    def __init__(self, *, track=None, liked=False, log: SpotifyCallLog | None = None):
+    def __init__(self, *, track=None, liked=False, playback=None, log: SpotifyCallLog | None = None):
         self._track = track
         self._liked = liked
+        self._playback = playback
         self.log = log or SpotifyCallLog()
 
     def current_user_playing_track(self):
         self.log.current_user_playing_track += 1
         return self._track
+
+    def current_playback(self):
+        self.log.current_playback += 1
+        return self._playback
 
     def current_user_saved_tracks_contains(self, *, tracks):
         assert isinstance(tracks, list)
@@ -66,6 +74,12 @@ class FakeSpotify:
 
     def start_playback(self):
         self.log.start_playback += 1
+
+    def volume(self, volume_percent, device_id=None):
+        assert self.log.volume is not None
+        self.log.volume.append((volume_percent, device_id))
+        if isinstance(self._playback, dict) and isinstance(self._playback.get('device'), dict):
+            self._playback['device']['volume_percent'] = volume_percent
 
     def current_user_saved_tracks_add(self, *, tracks):
         self.log.saved_tracks_add.append(tracks)

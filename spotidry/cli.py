@@ -17,4 +17,7 @@ def parse_args():
     parser.add_argument(
         '--previous', action='store_true', help='play previous track/skip to beginning of current track'
     )
+    parser.add_argument('--volume-show', action='store_true', help='print current device volume')
+    parser.add_argument('--volume-up', action='store_true', help='increase current device volume by 10%%')
+    parser.add_argument('--volume-down', action='store_true', help='decrease current device volume by 10%%')
     return parser.parse_args()

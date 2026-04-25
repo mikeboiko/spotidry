@@ -16,6 +16,15 @@ from spotipy.oauth2 import SpotifyOAuth
 
 DEFAULT_STATUS_CACHE_SECONDS = 5.0
 STATUS_CACHE_FILENAME = 'status_cache.json'
+DEFAULT_VOLUME_STEP = 10
+AUTO_VOLUME = object()
+SPOTIFY_SCOPE = (
+    'user-read-currently-playing '
+    'user-read-playback-state '
+    'user-library-read '
+    'user-library-modify '
+    'user-modify-playback-state'
+)
 
 
 def _scroll_loop(text: str, *, width: int, offset: int, gap: str = '   ') -> str:
@@ -69,7 +78,7 @@ class Spotidry:
                 client_id=self.config.get('client_id'),
                 client_secret=self.config.get('client_secret'),
                 redirect_uri=self.config.get('redirect_uri'),
-                scope='user-read-currently-playing user-library-read user-library-modify user-modify-playback-state',
+                scope=SPOTIFY_SCOPE,
             ),
             retries=0,
             status_retries=0,
@@ -94,7 +103,7 @@ class Spotidry:
                 print(exc)
 
     def ensure_connected(self):
-        if self.sp is None:
+        if getattr(self, 'sp', None) is None:
             self.connect()
 
     def _status_cache_path(self) -> Path:
@@ -255,6 +264,26 @@ class Spotidry:
             self._status_cache_seconds(),
         )
 
+    def _current_playback(self) -> dict[str, object] | None:
+        self.ensure_connected()
+        assert self.sp is not None
+
+        playback: object = self.sp.current_playback()
+        return playback if isinstance(playback, dict) else None
+
+    def _current_volume(self) -> tuple[int | None, str | None]:
+        playback = self._current_playback()
+        device = playback.get('device') if isinstance(playback, dict) else None
+        if not isinstance(device, dict):
+            return None, None
+
+        volume_percent = device.get('volume_percent')
+        if not isinstance(volume_percent, int):
+            return None, None
+
+        device_id = device.get('id')
+        return max(0, min(volume_percent, 100)), device_id if isinstance(device_id, str) else None
+
     def refresh(
         self,
         *,
@@ -315,6 +344,25 @@ class Spotidry:
         self.sp.previous_track()
         self._invalidate_status_cache()
         # self.sp.seek_track(0)
+
+    def change_volume(self, delta: int) -> int | None:
+        current_volume, device_id = self._current_volume()
+        if current_volume is None:
+            return None
+
+        target_volume = max(0, min(current_volume + delta, 100))
+
+        if target_volume != current_volume:
+            assert self.sp is not None
+            self.sp.volume(target_volume, device_id=device_id)
+
+        return target_volume
+
+    def volume_up(self) -> int | None:
+        return self.change_volume(DEFAULT_VOLUME_STEP)
+
+    def volume_down(self) -> int | None:
+        return self.change_volume(-DEFAULT_VOLUME_STEP)
 
     def setup(self):
         try:
@@ -411,6 +459,17 @@ class Spotidry:
                     liked_symbol=liked_symbol,
                 )
             )
+
+    def print_volume(self, *, volume_percent: int | None | object = AUTO_VOLUME):
+        current_volume = volume_percent
+        if current_volume is AUTO_VOLUME:
+            current_volume, _ = self._current_volume()
+
+        if current_volume is None:
+            print('Volume unavailable')
+            return
+
+        print(f'{current_volume}%')
 
     def print_stopped(self):
         print(' ⏹')

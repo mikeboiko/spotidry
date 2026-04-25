@@ -1,3 +1,10 @@
+# 0.0.11 (2026-04-25)
+
+- Add `--volume-show`, `--volume-up`, and `--volume-down` commands for current device volume without changing the default status output.
+- Test the project in GitHub Actions across Python 3.10 through 3.14 and pin local development to Python 3.14.
+- Refresh the README, remove the roadmap section, and fix the `--previous` help text typo.
+- Automate release tag creation in GitHub Actions based on the version in `spotidry/__init__.py`.
+
 # 0.0.10 (2026-03-26)
 
 - Cache playback status between frequent CLI invocations so 1Hz status bars do not hit Spotify on every refresh.

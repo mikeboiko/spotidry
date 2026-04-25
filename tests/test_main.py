@@ -25,11 +25,22 @@ class FakeSpotidry:
     def previous(self):
         self.calls.append('previous')
 
+    def volume_up(self):
+        self.calls.append('volume_up')
+        return 60
+
+    def volume_down(self):
+        self.calls.append('volume_down')
+        return 40
+
     def refresh(self, *, allow_cached_status, allow_stale_fallback):
         self.calls.append(('refresh', allow_cached_status, allow_stale_fallback))
 
     def print_info(self):
         self.calls.append('print_info')
+
+    def print_volume(self, *, volume_percent=None):
+        self.calls.append(('print_volume', volume_percent))
 
     def print_stopped(self):
         self.calls.append('print_stopped')
@@ -39,7 +50,16 @@ def test_main_track_missing_prints_stopped(monkeypatch):
     monkeypatch.setattr(
         __main__.cli,
         'parse_args',
-        lambda: Namespace(save=False, setup=False, play=False, next=False, previous=False),
+        lambda: Namespace(
+            save=False,
+            setup=False,
+            play=False,
+            next=False,
+            previous=False,
+            volume_show=False,
+            volume_up=False,
+            volume_down=False,
+        ),
     )
     monkeypatch.setattr(
         __main__.spotify, 'Spotidry', lambda **kwargs: FakeSpotidry(track_present=False, **kwargs)
@@ -54,7 +74,16 @@ def test_main_invokes_requested_actions(monkeypatch):
     monkeypatch.setattr(
         __main__.cli,
         'parse_args',
-        lambda: Namespace(save=True, setup=True, play=True, next=True, previous=True),
+        lambda: Namespace(
+            save=True,
+            setup=True,
+            play=True,
+            next=True,
+            previous=True,
+            volume_show=False,
+            volume_up=False,
+            volume_down=False,
+        ),
     )
     monkeypatch.setattr(__main__.spotify, 'Spotidry', lambda **_kwargs: fake)
 
@@ -77,7 +106,16 @@ def test_main_setup_only_uses_setup_shortcut(monkeypatch):
     monkeypatch.setattr(
         __main__.cli,
         'parse_args',
-        lambda: Namespace(save=False, setup=True, play=False, next=False, previous=False),
+        lambda: Namespace(
+            save=False,
+            setup=True,
+            play=False,
+            next=False,
+            previous=False,
+            volume_show=False,
+            volume_up=False,
+            volume_down=False,
+        ),
     )
     monkeypatch.setattr(
         __main__.spotify.Spotidry, 'setup_only', classmethod(lambda cls: called.setdefault('setup', 1))
@@ -86,3 +124,26 @@ def test_main_setup_only_uses_setup_shortcut(monkeypatch):
     rc = __main__.main()
     assert rc == 0
     assert called['setup'] == 1
+
+
+def test_main_volume_flags_print_volume(monkeypatch):
+    fake = FakeSpotidry(track_present=False)
+    monkeypatch.setattr(
+        __main__.cli,
+        'parse_args',
+        lambda: Namespace(
+            save=False,
+            setup=False,
+            play=False,
+            next=False,
+            previous=False,
+            volume_show=False,
+            volume_up=True,
+            volume_down=False,
+        ),
+    )
+    monkeypatch.setattr(__main__.spotify, 'Spotidry', lambda **_kwargs: fake)
+
+    rc = __main__.main()
+    assert rc == 0
+    assert fake.calls == ['volume_up', ('print_volume', 60)]
