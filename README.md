@@ -35,7 +35,7 @@ pip install --user spotidry
 spotidry --setup
 ```
 
-Spotidry is tested on Linux across Python 3.10 through 3.13.
+Spotidry is tested on Linux across Python 3.10 through 3.14.
 
 ## Spotify setup
 
@@ -166,6 +166,8 @@ git clone https://github.com/mikeboiko/spotidry.git
 cd spotidry
 uv sync --extra test
 ```
+
+The repository pins the local development interpreter to Python 3.14 via `.python-version`, so `uv` will pick that version automatically when available.
 
 Useful development commands:
 
