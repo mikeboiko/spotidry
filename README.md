@@ -35,7 +35,7 @@ pip install --user spotidry
 spotidry --setup
 ```
 
-Spotidry is currently tested on Linux.
+Spotidry is tested on Linux across Python 3.10 through 3.13.
 
 ## Spotify setup
 
