@@ -1,7 +1,9 @@
 glob_matcher: doublestar
 
 pre-commit:
-  parallel: True
+  parallel: true
+  skip:
+    - rebase
   commands:
     prettier-format:
       glob: '**/*.{js,jsx,ts,tsx,json,css,scss,md,yaml,yml}'
