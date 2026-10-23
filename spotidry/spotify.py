@@ -71,10 +71,18 @@ class Spotidry:
     def setup_only(cls):
         cls.__new__(cls).setup()
 
+    @staticmethod
+    def _auth_cache_path() -> Path:
+        return Path(user_cache_dir('spotidry.json'))
+
+    @classmethod
+    def clear_auth_cache(cls) -> None:
+        cls._auth_cache_path().unlink(missing_ok=True)
+
     def connect(self):
         self.sp = spotipy.Spotify(
             auth_manager=SpotifyOAuth(
-                cache_path=user_cache_dir('spotidry.json'),
+                cache_path=str(self._auth_cache_path()),
                 client_id=self.config.get('client_id'),
                 client_secret=self.config.get('client_secret'),
                 redirect_uri=self.config.get('redirect_uri'),

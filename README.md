@@ -105,14 +105,15 @@ spotidry --previous
 spotidry --volume-show
 spotidry --volume-up
 spotidry --volume-down
+spotidry --reauth
 spotidry --setup
 ```
 
 CLI help:
 
 ```text
-usage: spotidry [-h] [-v] [-s] [-S] [-p] [-n] [--previous] [--volume-show]
-                [--volume-up] [--volume-down]
+usage: spotidry [-h] [-v] [-s] [-S] [--reauth] [-p] [-n] [--previous]
+                [--volume-show] [--volume-up] [--volume-down]
 
 Spotify CLI client
 
@@ -121,6 +122,7 @@ options:
   -v, --version  show program's version number and exit
   -s, --save     toggle liked track status
   -S, --setup    setup spotidry configuration
+  --reauth       clear cached Spotify authorization and sign in again
   -p, --play     play/pause track
   -n, --next     play next track
   --previous     play previous track/skip to beginning of current track
@@ -131,7 +133,7 @@ options:
 
 The volume commands print only the current volume. They do not add volume to the default `spotidry` status line.
 
-If you need to re-authorize Spotify, delete the auth cache at `~/.cache/spotidry.json` and run Spotidry again. If you are upgrading from an older release, re-authorizing may be necessary for the new playback-state scope used by the volume commands.
+Run `spotidry --reauth` to clear the cached Spotify authorization and start the browser sign-in flow again. On Linux, the OAuth token cache is `~/.cache/spotidry.json`. If Spotify revokes a refresh token, Spotidry prints this recovery command. If you are upgrading from an older release, re-authorizing may be necessary for the new playback-state scope used by the volume commands.
 
 ## Tmux integration
 

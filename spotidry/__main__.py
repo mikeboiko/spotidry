@@ -1,14 +1,33 @@
 """Main entry point for spotidry"""
 
-from spotidry import cli, spotify
 import sys
 
+from spotidry import cli, spotify
+from spotipy.exceptions import SpotifyOauthError
 
-def main():
+
+def main() -> int:
+    try:
+        return _main()
+    except SpotifyOauthError as exc:
+        if exc.error != 'invalid_grant':
+            raise
+
+        print(
+            'Spotify rejected the cached refresh token. ' + 'Run `spotidry --reauth` to sign in again.',
+            file=sys.stderr,
+        )
+        return 1
+
+
+def _main() -> int:
     args = cli.parse_args()
+    if args.reauth:
+        spotify.Spotidry.clear_auth_cache()
+
     track_actions_requested = any((args.save, args.play, args.next, args.previous))
     volume_actions_requested = any((args.volume_show, args.volume_up, args.volume_down))
-    actions_requested = track_actions_requested or volume_actions_requested
+    actions_requested = track_actions_requested or volume_actions_requested or args.reauth
 
     if args.setup and not actions_requested:
         spotify.Spotidry.setup_only()

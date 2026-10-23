@@ -93,3 +93,13 @@ def test_connect_wires_spotify_oauth(monkeypatch):
     assert created['spotify_kwargs']['retries'] == 0
     assert created['spotify_kwargs']['status_retries'] == 0
     assert created['spotify_kwargs']['backoff_factor'] == 0
+
+
+def test_clear_auth_cache_removes_only_oauth_cache(tmp_path, monkeypatch):
+    auth_cache = tmp_path / 'spotidry.json'
+    auth_cache.write_text('cached token', encoding='utf-8')
+    monkeypatch.setattr('spotidry.spotify.user_cache_dir', lambda _: str(auth_cache))
+
+    Spotidry.clear_auth_cache()
+
+    assert not auth_cache.exists()

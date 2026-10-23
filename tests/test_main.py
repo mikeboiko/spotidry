@@ -3,6 +3,7 @@ from __future__ import annotations
 from argparse import Namespace
 
 from spotidry import __main__
+from spotipy.exceptions import SpotifyOauthError
 
 
 class FakeSpotidry:
@@ -53,6 +54,7 @@ def test_main_track_missing_prints_stopped(monkeypatch):
         lambda: Namespace(
             save=False,
             setup=False,
+            reauth=False,
             play=False,
             next=False,
             previous=False,
@@ -77,6 +79,7 @@ def test_main_invokes_requested_actions(monkeypatch):
         lambda: Namespace(
             save=True,
             setup=True,
+            reauth=False,
             play=True,
             next=True,
             previous=True,
@@ -109,6 +112,7 @@ def test_main_setup_only_uses_setup_shortcut(monkeypatch):
         lambda: Namespace(
             save=False,
             setup=True,
+            reauth=False,
             play=False,
             next=False,
             previous=False,
@@ -134,6 +138,7 @@ def test_main_volume_flags_print_volume(monkeypatch):
         lambda: Namespace(
             save=False,
             setup=False,
+            reauth=False,
             play=False,
             next=False,
             previous=False,
@@ -157,6 +162,7 @@ def test_main_volume_show_calls_print_volume_without_arg(monkeypatch):
         lambda: Namespace(
             save=False,
             setup=False,
+            reauth=False,
             play=False,
             next=False,
             previous=False,
@@ -172,3 +178,77 @@ def test_main_volume_show_calls_print_volume_without_arg(monkeypatch):
     # volume_show alone should call print_volume with no explicit volume
     # so it uses AUTO_VOLUME to fetch the current volume from the API
     assert fake.calls == [('print_volume', None)]
+
+
+def test_main_reauth_clears_auth_cache_and_skips_status_cache(monkeypatch):
+    calls = []
+    fake = FakeSpotidry(track_present=True)
+
+    class FakeSpotidryFactory:
+        @staticmethod
+        def clear_auth_cache():
+            calls.append('clear_auth_cache')
+
+        def __new__(cls, **kwargs):
+            calls.append(kwargs)
+            return fake
+
+    monkeypatch.setattr(
+        __main__.cli,
+        'parse_args',
+        lambda: Namespace(
+            save=False,
+            setup=False,
+            reauth=True,
+            play=False,
+            next=False,
+            previous=False,
+            volume_show=False,
+            volume_up=False,
+            volume_down=False,
+        ),
+    )
+    monkeypatch.setattr(__main__.spotify, 'Spotidry', FakeSpotidryFactory)
+
+    rc = __main__.main()
+
+    assert rc == 0
+    assert calls == [
+        'clear_auth_cache',
+        {'allow_cached_status': False, 'allow_stale_fallback': False},
+    ]
+    assert fake.calls == ['print_info']
+
+
+def test_main_invalid_grant_suggests_reauthentication(monkeypatch, capsys):
+    monkeypatch.setattr(
+        __main__.cli,
+        'parse_args',
+        lambda: Namespace(
+            save=False,
+            setup=False,
+            reauth=False,
+            play=False,
+            next=False,
+            previous=False,
+            volume_show=False,
+            volume_up=False,
+            volume_down=False,
+        ),
+    )
+
+    def fail_to_connect(**_kwargs):
+        raise SpotifyOauthError(
+            'invalid grant',
+            error='invalid_grant',
+            error_description='Refresh token revoked',
+        )
+
+    monkeypatch.setattr(__main__.spotify, 'Spotidry', fail_to_connect)
+
+    rc = __main__.main()
+
+    assert rc == 1
+    assert capsys.readouterr().err == (
+        'Spotify rejected the cached refresh token. Run `spotidry --reauth` to sign in again.\n'
+    )
