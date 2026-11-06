@@ -1,7 +1,7 @@
 # Spotidry
 
-[![Tests](https://github.com/mikeboiko/spotidry/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/mikeboiko/spotidry/actions/workflows/tests.yml)
-[![Publish to PyPI](https://github.com/mikeboiko/spotidry/actions/workflows/publish.yml/badge.svg?branch=master)](https://github.com/mikeboiko/spotidry/actions/workflows/publish.yml)
+[![Tests](https://github.com/mikeboiko/spotidry/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/mikeboiko/spotidry/actions/workflows/tests.yml)
+[![Publish to PyPI](https://github.com/mikeboiko/spotidry/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/mikeboiko/spotidry/actions/workflows/publish.yml)
 [![PyPI version](https://img.shields.io/pypi/v/spotidry)](https://pypi.org/project/spotidry/)
 [![Python 3.10+](https://img.shields.io/pypi/pyversions/spotidry)](https://pypi.org/project/spotidry/)
 
@@ -193,7 +193,7 @@ uv run spotidry --help
 GitHub Actions handles validation and publishing:
 
 - **Tests** runs on every push, pull request, and manual dispatch.
-- **Publish to PyPI** runs after a successful `Tests` run on `master`.
+- **Publish to PyPI** runs after a successful `Tests` run on `main`.
 - A release is only created when `spotidry/__init__.py` changes and the version is bumped.
 
 Routine commits should leave `spotidry/__init__.py` and `CHANGELOG.md` alone. Update them together only when preparing an actual release.

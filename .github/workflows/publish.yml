@@ -6,7 +6,7 @@ on:
     types:
       - completed
     branches:
-      - master
+      - main
 jobs:
   build-n-publish:
     name: Build and publish to PyPI
@@ -69,7 +69,7 @@ jobs:
           if git rev-parse --verify --quiet "refs/tags/${RELEASE_TAG}" >/dev/null; then
             TAG_SHA="$(git rev-list -n 1 "${RELEASE_TAG}")"
             if [ "${TAG_SHA}" != "${HEAD_SHA}" ]; then
-              echo "::error::Tag ${RELEASE_TAG} already exists on ${TAG_SHA}. Bump spotidry/__init__.py before merging to master."
+              echo "::error::Tag ${RELEASE_TAG} already exists on ${TAG_SHA}. Bump spotidry/__init__.py before merging to main."
               exit 1
             fi
             exit 0
