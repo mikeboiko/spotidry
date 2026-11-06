@@ -17,7 +17,7 @@ This repository contains a command-line client for Spotify.
 ## Deployment
 
 - **Versioning**: Version is managed in `spotidry/__init__.py`. Update it only for explicit release preparation.
-- **Changelog**: Update `CHANGELOG.md` only when preparing a release. Do not add `Unreleased` entries intended to be committed to `master`.
+- **Changelog**: Update `CHANGELOG.md` only when preparing a release. Do not add `Unreleased` entries intended to be committed to `main`.
 - **Release Prep**: When asked to prepare a release, bump `spotidry/__init__.py`, add a versioned changelog section for that release, and move the relevant notes into it.
 - **Clarify**: If a task might imply a release, ask before changing versioning or other release metadata.
 
